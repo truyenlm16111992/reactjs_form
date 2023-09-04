@@ -1,3 +1,11 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+.ant-popconfirm-buttons button{
+    background: #65a30d !important;
+    color: white;
+}
+.ant-popconfirm-buttons button:hover{
+    border-color: #65a30d !important;
+    color: white !important;
+}

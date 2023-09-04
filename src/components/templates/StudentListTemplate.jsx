@@ -1,4 +1,4 @@
-import { Space, Table, Tag, message, Popconfirm } from 'antd';
+import { Space, Table, Tag, Popconfirm } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import { btFormActions } from 'store';
 import styled from 'styled-components'
@@ -53,9 +53,9 @@ export const StudentListTemplate = () => {
           <Popconfirm
             placement="leftBottom"
             title="Vui lòng xác nhận?"
-            description="Bạn đang chỉnh sửa thông tin một sinh viên nhưng chưa hoàn thành, bạn có muốn tiếp tục?"
+            description="Tiếp tục chỉnh sửa một sinh viên khác, sẽ hủy thông tin đang chỉnh sửa chưa lưu, bạn có muốn tiếp tục?"
             onConfirm={() => dispatch(btFormActions.editStudent(record))}
-            okText="Đồng ý"
+            okText="Có"
             cancelText="Không"
             disabled={!studentEditing}
           >
@@ -72,10 +72,10 @@ export const StudentListTemplate = () => {
           <Popconfirm
             placement="leftBottom"
             title="Bạn chắc rằng muốn xóa?"
-            description="Bấm vào đồng ý để thực hiện xóa sinh viên này."
+            description='Bấm vào "Có" để thực hiện xóa sinh viên này.'
             onConfirm={() => dispatch(btFormActions.deleteStudent(record.code))}
-            okText="Xác nhận"
-            cancelText="Hủy"
+            okText="Có"
+            cancelText="Không"
           >
             <button className='w-[30px] h-[30px] rounded-6 flex items-center justify-center hover:bg-lime-600 hover:text-white'>
               <i className="fa fa-trash-alt"></i>

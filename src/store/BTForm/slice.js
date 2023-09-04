@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import {convertStringSearch} from "utils"
+import { convertStringSearch } from "utils"
 
 const initialState = {
     studentData: [],
@@ -30,8 +30,11 @@ const btFormSlice = createSlice({
             state.studentEditing = undefined;
         },
         deleteStudent: (state, { payload }) => {
-            state.studentData = state.studentData.filter(e => e.code !== payload);
+            const {studentData, studentEditing} = state;
+            state.studentData = studentData.filter(e => e.code !== payload);
             state.studentList = [...state.studentData];
+            if (studentEditing?.code === payload)
+                state.studentEditing = undefined;
         },
         searchStudent: (state, { payload }) => {
             state.studentList = [...payload ? state.studentData.filter(e => {
