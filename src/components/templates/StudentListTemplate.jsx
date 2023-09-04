@@ -1,4 +1,4 @@
-import { Space, Table, Tag } from 'antd';
+import { Space, Table, Tag, message, Popconfirm } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import { btFormActions } from 'store';
 import styled from 'styled-components'
@@ -17,8 +17,11 @@ const TextInput = styled.input`
     }
 `;
 export const StudentListTemplate = () => {
-  const { studentData } = useSelector(state => state.btFormRedux);
+  const { studentList, studentEditing } = useSelector(state => state.btFormRedux);
   const dispatch = useDispatch();
+  const confirmDelete = () => {
+    dispatch(btFormActions.editStudent(record))
+  };
   const columns = [
     {
       title: 'Mã sinh viên',
@@ -50,29 +53,53 @@ export const StudentListTemplate = () => {
       align: 'center',
       render: (_, record) => (
         <Space size='middle' align='center'>
-          <button
-            className='w-[30px] h-[30px] rounded-6 flex items-center justify-center transition-colors duration-300 hover:bg-lime-600 hover:text-white'
-            onClick={() => dispatch(btFormActions.editStudent(record))}
+          <Popconfirm
+            placement="leftBottom"
+            title="Bạn đang sửa thông tin sinh viên nhưng chưa lưu, bạn có muốn tiếp tục?"
+            description="Đồng ý tiếp tục sẽ hủy thông tin đang sửa của sinh viên trước đó."
+            onConfirm={()=>()=>dispatch(btFormActions.editStudent(record))}
+            okText="Đồng ý"
+            cancelText="Không"
+            
           >
-            <i className="fa fa-edit"></i>
-          </button>
-          <button
-            className='w-[30px] h-[30px] rounded-6 flex items-center justify-center hover:bg-lime-600 hover:text-white'
-            onClick={() => dispatch(btFormActions.deleteStudent(record.code))}
+            <button className='w-[30px] h-[30px] rounded-6 flex items-center justify-center transition-colors duration-300 hover:bg-lime-600 hover:text-white'>
+              <i className="fa fa-edit"></i>
+            </button>
+          </Popconfirm>
+          <Popconfirm
+            placement="leftBottom"
+            title="Bạn chắc rằng muốn xóa?"
+            description="Bấm vào đồng ý để thực hiện xóa sinh viên này."
+            onConfirm={() => dispatch(btFormActions.deleteStudent(record.code))}
+            okText="Xác nhận"
+            cancelText="Hủy"
           >
-            <i className="fa fa-trash-alt"></i>
-          </button>
+            <button className='w-[30px] h-[30px] rounded-6 flex items-center justify-center hover:bg-lime-600 hover:text-white'>
+              <i className="fa fa-trash-alt"></i>
+            </button>
+          </Popconfirm>
         </Space>
       ),
     },
   ];
+  let timer;
+  const handleSearch = () => (event) => {
+    clearTimeout(timer);
+    timer = setTimeout(() => {
+      dispatch(btFormActions.searchStudent(event.target.value));
+    }, 500);
+  }
   return (
     <div>
       <div className="flex justify-between bg-gray-800 px-10 py-8">
         <h6 className='text-white text-20 font-600'>Danh sách sinh viên</h6>
-        <TextInput className='text-black !w-[300px]' placeholder='Gõ nội dung cần tìm kiếm'/>
+        <TextInput
+          className='text-black !w-[300px]'
+          placeholder='Gõ nội dung cần tìm kiếm'
+          onChange={handleSearch()}
+        />
       </div>
-      <Table columns={columns} dataSource={studentData} rowKey={"code"} pagination={{ pageSize: 5 }} />
+      <Table columns={columns} dataSource={studentList} rowKey={"code"} pagination={{ pageSize: 5 }} />
     </div>
   )
 }
