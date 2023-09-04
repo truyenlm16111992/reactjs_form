@@ -19,9 +19,6 @@ const TextInput = styled.input`
 export const StudentListTemplate = () => {
   const { studentList, studentEditing } = useSelector(state => state.btFormRedux);
   const dispatch = useDispatch();
-  const confirmDelete = () => {
-    dispatch(btFormActions.editStudent(record))
-  };
   const columns = [
     {
       title: 'Mã sinh viên',
@@ -55,14 +52,20 @@ export const StudentListTemplate = () => {
         <Space size='middle' align='center'>
           <Popconfirm
             placement="leftBottom"
-            title="Bạn đang sửa thông tin sinh viên nhưng chưa lưu, bạn có muốn tiếp tục?"
-            description="Đồng ý tiếp tục sẽ hủy thông tin đang sửa của sinh viên trước đó."
-            onConfirm={()=>()=>dispatch(btFormActions.editStudent(record))}
+            title="Vui lòng xác nhận?"
+            description="Bạn đang chỉnh sửa thông tin một sinh viên nhưng chưa hoàn thành, bạn có muốn tiếp tục?"
+            onConfirm={() => dispatch(btFormActions.editStudent(record))}
             okText="Đồng ý"
             cancelText="Không"
-            
+            disabled={!studentEditing}
           >
-            <button className='w-[30px] h-[30px] rounded-6 flex items-center justify-center transition-colors duration-300 hover:bg-lime-600 hover:text-white'>
+            <button
+              className='w-[30px] h-[30px] rounded-6 flex items-center justify-center transition-colors duration-300 hover:bg-lime-600 hover:text-white'
+              onClick={() => {
+                if (!studentEditing)
+                  dispatch(btFormActions.editStudent(record));
+              }}
+            >
               <i className="fa fa-edit"></i>
             </button>
           </Popconfirm>
